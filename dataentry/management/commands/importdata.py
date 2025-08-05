@@ -4,13 +4,14 @@ from django.apps import apps
 
 from dataentry.models import Student
 
-import csv
+import csv # to work with the csv files 
+
 class Command(BaseCommand):
     help=" inport data from csv file "
 
     #takes csv file path as the input --
     def add_arguments(self, parser):
-        parser.add_argument('file_path',type=str, help=" takes the file path as input ")
+        parser.add_argument('file_path',type=str, help=" takes the file path as input ") # first argument given 
         parser.add_argument('model_name',type=str,help='name of the model')
 
     def handle (self,*args , **kwargs):
@@ -31,13 +32,13 @@ class Command(BaseCommand):
 
             # try to search for the model inside the app
             try:
-                model=apps.get_model(app_config.label,model_name)
+                model=apps.get_model(app_config.label,model_name) # checks for the model in the current app
                 break #stop searching once the model has been found
             except LookupError:
                 # if we dont get the model then we get the lookup error
                 continue # search in the next app
         if not model:
-            raise CommandError(f'model {model_name} not found in any app!')
+            raise CommandError(f'model {model_name} not found in any app!') #remained none
             
 
         #with makes sure that the file is cloeed properly 
@@ -46,5 +47,5 @@ class Command(BaseCommand):
             print(reader) #reader is a dict reader object
             for row in reader:
                 
-                model.objects.create(**row)
-                self.stdout.write(self.style.SUCCESS("Data inseerted successfully!"))
+                model.objects.create(**row) # acc to the data in the row ( dict ) macthes the data and creates the object
+                self.stdout.write(self.style.SUCCESS("Data inseerted successfully!")) #command line output
